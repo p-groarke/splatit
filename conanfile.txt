@@ -1,0 +1,16 @@
+[requires]
+gtest/1.11.0#7475482232fcd017fa110b0b8b0f936e
+libspng/0.7.4
+glm/cci.20230113
+
+[generators]
+CMakeToolchain
+CMakeDeps
+
+[options]
+gtest/*:build_gmock=False
+
+[imports]
+bin, *.pdb -> ./bin
+bin, *.pdb -> ./lib
+bin, *.dll -> ./bin
