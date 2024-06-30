@@ -9,7 +9,7 @@ namespace {
 TEST(image, load) {
 	std::filesystem::path exe_path = fea::executable_dir(argv0);
 	std::filesystem::path testfiles_dir = exe_path / "tests_data/";
-	std::filesystem::path bw_img_path = testfiles_dir / "tattoo_bw.png";
+	std::filesystem::path bw_img_path = testfiles_dir / "splatit_bw.png";
 
 	splat::img_id imgid = splat::load(bw_img_path);
 	EXPECT_NE(imgid, splat::img_id{});

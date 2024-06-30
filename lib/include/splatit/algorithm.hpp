@@ -41,13 +41,6 @@ struct square_range {
 		// Top row.
 		if (!skip_ytop) {
 			for (mssize_t x = _xleft; x <= _xright; ++x) {
-				// if (x == _xleft && skip_xleft) {
-				//	continue;
-				// }
-				// if (x == _xright && skip_xright) {
-				//	continue;
-				// }
-
 				assert(_ytop >= 0 && x >= 0);
 				if (func(size_t(x), size_t(_ytop))) {
 					return true;
@@ -79,13 +72,6 @@ struct square_range {
 		// Bottom row.
 		if (!skip_ybottom) {
 			for (mssize_t x = _xleft; x <= _xright; ++x) {
-				// if (x == _xleft && skip_xleft) {
-				//	continue;
-				// }
-				// if (x == _xright && skip_xright) {
-				//	continue;
-				// }
-
 				assert(_ybottom >= 0 && x >= 0);
 				if (func(size_t(x), size_t(_ybottom))) {
 					return true;
