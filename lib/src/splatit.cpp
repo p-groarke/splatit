@@ -1,6 +1,6 @@
 #include "splatit/splatit.hpp"
-#include "private_include/algorithm.hpp"
 #include "private_include/image.hpp"
+#include "splatit/algorithm.hpp"
 
 #include <algorithm>
 #include <cmath>

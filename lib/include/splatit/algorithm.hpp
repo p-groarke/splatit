@@ -1,5 +1,5 @@
 #pragma once
-#include "image.hpp"
+// #include "image.hpp"
 
 #include <cassert>
 #include <type_traits>
@@ -23,9 +23,9 @@ struct square_range {
 
 		// We loop inclusively.
 		_ytop = _ytop == 0 ? 0 : _ytop - 1;
-		_ybottom = _ybottom == _height - 1 ? _height - 1 : _ybottom + 1;
+		_ybottom = _ybottom >= _height - 1 ? _height - 1 : _ybottom + 1;
 		_xleft = _xleft == 0 ? 0 : _xleft - 1;
-		_xright = _xright == _width - 1 ? _width - 1 : _xright + 1;
+		_xright = _xright >= _width - 1 ? _width - 1 : _xright + 1;
 	}
 
 	// Loop around the current square boundary.
@@ -41,12 +41,12 @@ struct square_range {
 		// Top row.
 		if (!skip_ytop) {
 			for (mssize_t x = _xleft; x <= _xright; ++x) {
-				if (x == _xleft && skip_xleft) {
-					continue;
-				}
-				if (x == _xright && skip_xright) {
-					continue;
-				}
+				// if (x == _xleft && skip_xleft) {
+				//	continue;
+				// }
+				// if (x == _xright && skip_xright) {
+				//	continue;
+				// }
 
 				assert(_ytop >= 0 && x >= 0);
 				if (func(size_t(x), size_t(_ytop))) {
@@ -56,18 +56,22 @@ struct square_range {
 		}
 
 		// Middle.
-		for (mssize_t y = _ytop + 1; y < _ybottom; ++y) {
-			if (!skip_xleft) {
-				assert(y >= 0 && _xleft >= 0);
-				if (func(size_t(_xleft), size_t(y))) {
-					return true;
+		{
+			mssize_t mtop = skip_ytop ? _ytop : _ytop + 1;
+			mssize_t mbottom = skip_ybottom ? _ybottom : _ybottom - 1;
+			for (mssize_t y = mtop; y <= mbottom; ++y) {
+				if (!skip_xleft) {
+					assert(y >= 0 && _xleft >= 0);
+					if (func(size_t(_xleft), size_t(y))) {
+						return true;
+					}
 				}
-			}
 
-			if (!skip_xright) {
-				assert(y >= 0 && _xright >= 0);
-				if (func(size_t(_xright), size_t(y))) {
-					return true;
+				if (!skip_xright) {
+					assert(y >= 0 && _xright >= 0);
+					if (func(size_t(_xright), size_t(y))) {
+						return true;
+					}
 				}
 			}
 		}
@@ -75,12 +79,12 @@ struct square_range {
 		// Bottom row.
 		if (!skip_ybottom) {
 			for (mssize_t x = _xleft; x <= _xright; ++x) {
-				if (x == _xleft && skip_xleft) {
-					continue;
-				}
-				if (x == _xright && skip_xright) {
-					continue;
-				}
+				// if (x == _xleft && skip_xleft) {
+				//	continue;
+				// }
+				// if (x == _xright && skip_xright) {
+				//	continue;
+				// }
 
 				assert(_ybottom >= 0 && x >= 0);
 				if (func(size_t(x), size_t(_ybottom))) {
@@ -118,36 +122,5 @@ private:
 	mssize_t _ybottom = _y;
 	mssize_t _xleft = _x;
 	mssize_t _xright = _x;
-};
-
-// template <class Func>
-// void for_each_neighbour(square_range sqr, Func&& func) {
-//
-//	size_t ytop = y == 0 ? 0 : y - 1;
-//	size_t ybottom = y >= img.height - 1 ? y : y + 2;
-//	size_t xleft = x == 0 ? 0 : x - 1;
-//	size_t xright = x >= img.width - 1 ? x : x + 2;
-// }
-
-// Calls your function for each direct neighbour of x,y (8 iterations).
-// Doesn't call on itself.
-// Return true to stop.
-template <class Func>
-void for_each_neighbour(const image& img, size_t y, size_t x, Func&& func) {
-	size_t yfirst = y == 0 ? 0 : y - 1;
-	size_t ylast = y >= img.height - 1 ? y : y + 2;
-	size_t xfirst = x == 0 ? 0 : x - 1;
-	size_t xlast = x >= img.width - 1 ? x : x + 2;
-
-	for (size_t ny = yfirst; ny < ylast; ++ny) {
-		for (size_t nx = xfirst; nx < xlast; ++nx) {
-			if (ny == y && nx == x) {
-				continue;
-			}
-			if (func(ny, nx)) {
-				return;
-			}
-		}
-	}
 };
 } // namespace splat

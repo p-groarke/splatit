@@ -140,6 +140,8 @@ if (SPLATIT_TESTS)
 	fea_static_runtime(${TEST_NAME})
 	fea_whole_program_optimization(${TEST_NAME} PUBLIC)
 	# set_target_properties(${TEST_NAME} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+	set_target_properties(${TEST_NAME} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--gtest_catch_exceptions=0 --gtest_filter=*")
+	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${TEST_NAME})
 
 	# Copy test data on build.
 	set(DATA_IN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests/data)
