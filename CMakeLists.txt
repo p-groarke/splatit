@@ -56,9 +56,19 @@ fea_fetch_content(fea_libs
 )
 
 # Pull conan
-fea_pull_conan_debug(CONAN_ARGS "-s compiler.runtime=MTd --build missing")
-fea_pull_conan_release(CONAN_ARGS "-s compiler.runtime=MT --build missing")
+fea_detect_conan(CONAN_VER)
+if (CONAN_VER EQUAL 1)
+	set(CONAN_REL_ARGS "-s compiler.runtime=MT")
+	set(CONAN_DBG_ARGS "-s compiler.runtime=MTd")
+else()
+	set(CONAN_REL_ARGS "-s compiler.runtime=static")
+	set(CONAN_DBG_ARGS "-s compiler.runtime=static")
+endif()
 
+fea_pull_conan_debug(CONAN_ARGS "${CONAN_DBG_ARGS} --build missing")
+fea_pull_conan_release(CONAN_ARGS "${CONAN_REL_ARGS} --build missing")
+
+# Find our conan dependencies.
 find_package(spng)
 find_package(glm)
 
@@ -68,6 +78,9 @@ file(GLOB_RECURSE LIB_HEADERS "lib/include/*.hpp" "lib/include/*.h" "lib/include
 file(GLOB_RECURSE LIB_SOURCES "lib/src/*.cpp" "lib/src/*.c" "lib/src/*.hpp" "lib/src/*.h" "lib/src/*.tpp")
 add_library(${LIB_NAME} ${LIB_HEADERS} ${LIB_SOURCES})
 target_include_directories(${LIB_NAME} PRIVATE lib/src) # For based paths.
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/lib/include PREFIX "Header Files" FILES ${LIB_HEADERS})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/lib/src PREFIX "Source Files" FILES ${LIB_SOURCES})
 
 fea_set_compile_options(${LIB_NAME} PUBLIC)
 fea_static_runtime(${LIB_NAME})
