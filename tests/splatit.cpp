@@ -6,15 +6,44 @@
 extern const char* argv0;
 
 namespace {
-TEST(image, load) {
+
+splat::splat_id sid_rgb;
+splat::splat_id sid_rgba;
+
+TEST(splatit, load) {
 	std::filesystem::path exe_path = fea::executable_dir(argv0);
 	std::filesystem::path testfiles_dir = exe_path / "tests_data/";
-	std::filesystem::path bw_img_path = testfiles_dir / "splatit_bw.png";
 
-	splat::img_id imgid = splat::load(bw_img_path);
-	EXPECT_NE(imgid, splat::img_id{});
-	EXPECT_EQ(imgid.id, 0u);
+	// rgb
+	{
+		std::filesystem::path img_path = testfiles_dir / "splatit_rgb.png";
+		sid_rgb = splat::load(img_path);
+		EXPECT_NE(sid_rgb, splat::splat_id{});
+		EXPECT_EQ(sid_rgb.id, 0u);
+	}
 
-	splat::splat_id sid = splat::convert(imgid, {});
+	// rgba
+	{
+		std::filesystem::path img_path = testfiles_dir / "splatit_rgba.png";
+		sid_rgba = splat::load(img_path);
+		EXPECT_NE(sid_rgba, splat::splat_id{});
+		EXPECT_EQ(sid_rgba.id, 1u);
+	}
+}
+
+TEST(splatit, save) {
+	std::filesystem::path exe_path = fea::executable_dir(argv0);
+	// std::filesystem::path testfiles_dir = exe_path / "tests_data/";
+	std::filesystem::path rgb_out_path = exe_path / "splatit_out_rgb.png";
+	std::filesystem::path rgba_out_path = exe_path / "splatit_out_rgba.png";
+
+	splat::save(sid_rgb, { .format = splat::output_format::rgb_uint8 },
+			rgb_out_path);
+	splat::save(sid_rgba, { .format = splat::output_format::rgba_f32 },
+			rgba_out_path);
+
+	// splat::splat_id sid = splat::convert(imgid, {});
+	// EXPECT_NE(sid, splat::splat_id{});
+	// EXPECT_EQ(sid, 0u);
 }
 } // namespace

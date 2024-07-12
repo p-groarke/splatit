@@ -3,18 +3,10 @@
 #include <limits>
 
 namespace splat {
-struct img_id {
-	auto operator<=>(const img_id&) const noexcept = default;
-	unsigned id = (std::numeric_limits<unsigned>::max)();
-};
 struct splat_id {
 	auto operator<=>(const splat_id&) const noexcept = default;
 	unsigned id = (std::numeric_limits<unsigned>::max)();
 };
-
-// Load and decode a png image. Pre-processes data for sdf conversion.
-extern img_id load(const std::filesystem::path& fpath);
-
 
 enum class output_format : unsigned {
 	// r == g == b, uint8
@@ -28,14 +20,15 @@ enum class output_format : unsigned {
 	count,
 };
 
-struct convert_opts {
+struct opts {
 	output_format format = output_format::rgb_uint8;
 };
 
-// Convert image to sdf using options.
-extern splat_id convert(img_id, convert_opts);
+// Load and decode a png image.
+// Pre-processes data and convert to raw sdf.
+extern splat_id load(const std::filesystem::path& fpath);
 
 // Save and encode the sdf image to png.
-extern void save(splat_id, const std::filesystem::path&);
+extern void save(splat_id, opts, const std::filesystem::path&);
 
 } // namespace splat
