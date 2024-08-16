@@ -21,7 +21,7 @@ struct image {
 	// A mask of 0, 1, 2.
 	std::vector<point> mask;
 
-	// The raw sdf (unprocessed).
+	// The raw sdf (non-normalized / non-clamped).
 	std::vector<double> sdf;
 };
 } // namespace splat

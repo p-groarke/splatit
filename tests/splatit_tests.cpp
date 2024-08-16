@@ -41,9 +41,5 @@ TEST(splatit, save) {
 			rgb_out_path);
 	splat::save(sid_rgba, { .format = splat::output_format::rgba_f32 },
 			rgba_out_path);
-
-	// splat::splat_id sid = splat::convert(imgid, {});
-	// EXPECT_NE(sid, splat::splat_id{});
-	// EXPECT_EQ(sid, 0u);
 }
 } // namespace
